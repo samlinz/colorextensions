@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta
+            http-equiv="Cache-Control"
+            content="no-cache, no-store, must-revalidate"
+        />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <title>Test color interpolating</title>
+    </head>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .progressbar {
+            height: 2rem;
+            margin: 0 1rem 0 1rem;
+            border: 1px solid black;
+            background-color: white;
+        }
+
+        .progressbar > .active {
+            width: 0px;
+            height: 100%;
+        }
+
+        .content {
+            margin: 0 auto 0 auto;
+            padding: 1rem;
+            width: 50%;
+            height: 100%;
+            background-color: blanchedalmond;
+        }
+
+        .content > * {
+            margin-bottom: 5rem;
+            margin-top: 5rem;
+        }
+
+        .input-parent {
+            margin-left: 0;
+            margin-right: 0;
+            display: flex;
+            flex-flow: row nowrap;
+            overflow-x: auto;
+        }
+
+        .input-parent > * {
+            text-align: center;
+        }
+
+        .flex-1 {
+            flex: 1;
+        }
+
+        .flex-2 {
+            flex: 2;
+        }
+
+        .flex-3 {
+            flex: 3;
+        }
+    </style>
+
+    <body>
+        <div class="content">
+            <h2>Test color interpolating</h2>
+
+            <!-- Progress bar -->
+            <div class="progressbar">
+                <div class="active"></div>
+            </div>
+
+            <!-- Progress bar color selection -->
+            <div class="input-parent">
+                <small class="flex-1">Start color</small>
+                <input
+                    type="text"
+                    value="#f00"
+                    id="color-start"
+                    class="flex-1"
+                />
+                <small class="flex-1">Stop color</small>
+                <input
+                    type="text"
+                    value="#0f0"
+                    id="color-stop"
+                    class="flex-1"
+                />
+            </div>
+
+            <div class="input-parent">
+                <!-- Slider -->
+                <input
+                    type="range"
+                    min="0.0"
+                    max="1.0"
+                    value="1.0"
+                    step="0.001"
+                    class="flex-3"
+                    id="interpolate-slider"
+                />
+                <h3 class="flex-1"></h3>
+            </div>
+
+            <hr />
+
+            <h2>Test conversions</h2>
+
+            <div class="input-parent">
+                <input
+                    type="text"
+                    placeholder="Value to convert"
+                    id="value-to-convert"
+                    class="flex-3"
+                />
+                <select id="convert-to-type">
+                    <option value="hex_short">Hex (short)</option>
+                    <option value="hex_long">Hex (long)</option>
+                    <option value="rgb">RGB</option>
+                    <option value="rgba">RGBA</option>
+                    <option value="object">Object</option>
+                </select>
+                <h4 class="flex-1">&#8594;</h4>
+                <input
+                    type="text"
+                    placeholder="Converted value"
+                    id="value-converted"
+                    class="flex-1"
+                    disabled
+                />
+            </div>
+        </div>
+
+        <script src="./colorextensions.min.js"></script>
+        <script>
+            const sliderValueTextElement = document.querySelector("input+h3");
+            const sliderElement = document.getElementById("interpolate-slider");
+            const convertElement = document.getElementById("value-to-convert");
+            const convertedElement = document.getElementById("value-converted");
+            const convertToTypeElement = document.getElementById(
+                "convert-to-type"
+            );
+            const colorStartElement = document.getElementById("color-start");
+            const colorStopElement = document.getElementById("color-stop");
+            const progressbar = document.querySelector(
+                ".progressbar > .active"
+            );
+
+            const onSliderChanged = (() => {
+                let previousColor = null;
+
+                return function onSliderChanged(e) {
+                    const sliderValue = e.target.value;
+
+                    if (previousColor === sliderValue) return;
+                    previousColor = sliderValue;
+
+                    sliderValueTextElement.textContent = sliderValue;
+
+                    const startColor = colorStartElement.value;
+                    const stopColor = colorStopElement.value;
+
+                    try {
+                        const interpolator = new ColorExtensions.ColorInterpolator(
+                            startColor,
+                            stopColor
+                        );
+                        progressbar.style.width = `${(sliderValue * 100) | 0}%`;
+                        progressbar.style.backgroundColor = interpolator.getColor(
+                            +sliderValue,
+                            "hex"
+                        );
+                    } catch (e) {
+                        console.error(`Failed: ${e}`);
+                        progressbar.style.width = 0;
+                    }
+                };
+            })();
+
+            function onValueChanged(value) {
+                let targetType = convertToTypeElement.value;
+
+                const extraValues = {};
+                if (targetType === "rgba") {
+                    extraValues["alpha"] = 0.5;
+                    targetType = "rgb";
+                }
+
+                let converted = null;
+                try {
+                    if (value.startsWith("{")) value = JSON.parse(value);
+
+                    converted = ColorExtensions.convertTo(
+                        value,
+                        targetType,
+                        extraValues
+                    );
+                } catch (e) {
+                    console.error(`Failed to convert: ${e}`);
+                    converted = "INVALID";
+                }
+
+                convertedElement.value = JSON.stringify(converted).replace(
+                    /\"/g,
+                    ""
+                );
+            }
+
+            function bindContinousUpdateEvent(element, event = "change") {
+                element.addEventListener("mouseover", () => {
+                    if (element.updateInterval) return;
+                    element.updateInterval = setInterval(() => {
+                        const customEvent = document.createEvent("Event");
+                        customEvent.initEvent("change");
+                        element.dispatchEvent(customEvent);
+                    }, 16);
+                });
+
+                element.addEventListener("mouseout", () => {
+                    if (element.updateInterval) {
+                        clearInterval(element.updateInterval);
+                        delete element.updateInterval;
+                    }
+                });
+            }
+
+            sliderElement.addEventListener("change", onSliderChanged);
+            convertElement.addEventListener("keyup", e =>
+                onValueChanged(e.target.value)
+            );
+            convertToTypeElement.addEventListener("change", () =>
+                onValueChanged(convertElement.value)
+            );
+
+            bindContinousUpdateEvent(sliderElement);
+            onSliderChanged({
+                target: sliderElement
+            });
+        </script>
+    </body>
+</html>
