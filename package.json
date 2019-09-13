@@ -6,7 +6,7 @@
   "main": "colorinterpolator.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx webpack",
+    "build": "npx webpack --mode=production",
     "start": "npx webpack-dev-server",
     "startOpen": "npx webpack-dev-server --open"
   },

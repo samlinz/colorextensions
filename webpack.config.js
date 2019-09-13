@@ -1,29 +1,30 @@
 const path = require("path");
 const webpack = require("webpack");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-//const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const npmPackage = require("./package.json");
 
 module.exports = {
     mode: "development",
     entry: {
-        colorextensions: "./src/colorextensions.js"
+        colorextensions: "./src/browserentry.js"
     },
     output: {
         filename: "[name].min.js",
         path: path.resolve(__dirname, "build")
     },
-    devtool: "inline-source-map",
+    // devtool: "inline-source-map",
     devServer: {
-        contentBase: "./build"
+        contentBase: "./build",
+        hot: true
     },
     plugins: [
         //new CleanWebpackPlugin(),
         new CopyWebpackPlugin([
             {
                 from: "static",
-                copyUnmodified: false
+                copyUnmodified: true
             }
         ]),
         new webpack.BannerPlugin({

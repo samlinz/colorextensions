@@ -13,68 +13,8 @@
         <title>Test color interpolating</title>
     </head>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .progressbar {
-            height: 2rem;
-            margin: 0 1rem 0 1rem;
-            border: 1px solid black;
-            background-color: white;
-        }
-
-        .progressbar > .active {
-            width: 0px;
-            height: 100%;
-        }
-
-        .content {
-            margin: 0 auto 0 auto;
-            padding: 1rem;
-            width: 50%;
-            height: 100%;
-            background-color: blanchedalmond;
-        }
-
-        .content > * {
-            margin-bottom: 5rem;
-            margin-top: 5rem;
-        }
-
-        .input-parent {
-            margin-left: 0;
-            margin-right: 0;
-            display: flex;
-            flex-flow: row nowrap;
-            overflow-x: auto;
-        }
-
-        .input-parent > * {
-            text-align: center;
-        }
-
-        .flex-1 {
-            flex: 1;
-        }
-
-        .flex-2 {
-            flex: 2;
-        }
-
-        .flex-3 {
-            flex: 3;
-        }
-    </style>
+    <!-- Style sheet. -->
+    <link rel="stylesheet" href="./testpage.css" />
 
     <body>
         <div class="content">
@@ -135,7 +75,7 @@
                     <option value="rgba">RGBA</option>
                     <option value="object">Object</option>
                 </select>
-                <h4 class="flex-1">&#8594;</h4>
+                <h1 class="flex-1">&#8594;</h1>
                 <input
                     type="text"
                     placeholder="Converted value"
@@ -146,7 +86,7 @@
             </div>
         </div>
 
-        <script src="./colorextensions.js"></script>
+        <script src="./colorextensions.min.js"></script>
         <script>
             const sliderValueTextElement = document.querySelector("input+h3");
             const sliderElement = document.getElementById("interpolate-slider");
@@ -181,10 +121,14 @@
                             stopColor
                         );
                         progressbar.style.width = `${(sliderValue * 100) | 0}%`;
-                        progressbar.style.backgroundColor = interpolator.getColor(
+
+                        const interpolatedColor = interpolator.getColor(
                             +sliderValue,
                             "hex"
                         );
+
+                        progressbar.style.backgroundColor = interpolatedColor;
+                        sliderValueTextElement.textContent += ` ${interpolatedColor}`;
                     } catch (e) {
                         console.error(`Failed: ${e}`);
                         progressbar.style.width = 0;
