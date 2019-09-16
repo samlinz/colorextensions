@@ -92,25 +92,32 @@ export function objToHex(obj, options) {
 export function rgbToObj(rgb) {
     const matches = RGB_REGEX.exec(rgb);
     if (!matches) throw Error(`Could not parse rgb ${rgb}`);
-    if (matches.length !== 4) throw Error(`Invalid number of matched groups`);
-    return {
-        r: matches[1],
-        g: matches[2],
-        b: matches[3]
+    if (matches.length < 4) throw Error(`Invalid number of matched groups`);
+
+    const result = {
+        r: +matches[1],
+        g: +matches[2],
+        b: +matches[3]
     };
+
+    // RGBA.
+    if (matches.length === 5) {
+        result["a"] = +matches[4];
+    }
+
+    return result;
 }
 
 /**
  * Convert RGB object to rgb string.
  * @param {object} obj RGB object.
  */
-export function objToRgb(obj, options) {
-    const optAlpha = (options && options.alpha) || null;
-
+export function objToRgb(obj) {
     validateRgbObject(obj);
-    const prefix = optAlpha !== null ? "rgba" : "rgb";
+    const rgba = "a" in obj;
+    const prefix = rgba ? "rgba" : "rgb";
     return `${prefix}(${obj["r"]},${obj["g"]},${obj["b"]}${
-        optAlpha ? `,${optAlpha}` : ""
+        rgba ? `,${obj["a"]}` : ""
     })`;
 }
 

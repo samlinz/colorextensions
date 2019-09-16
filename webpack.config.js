@@ -8,7 +8,7 @@ const npmPackage = require("./package.json");
 module.exports = {
     mode: "development",
     entry: {
-        colorextensions: "./src/browserentry.js"
+        "colorextensions_browser": "./src/browserentry.js",
     },
     output: {
         filename: "[name].min.js",

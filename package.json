@@ -5,7 +5,8 @@
   "private": true,
   "main": "colorinterpolator.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "testCoverage": "jest --coverage",
     "build": "npx webpack --mode=production",
     "start": "npx webpack-dev-server",
     "startOpen": "npx webpack-dev-server --open"
@@ -17,11 +18,13 @@
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.4",
     "eslint": "^6.3.0",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.9.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",
     "webpack-dev-server": "^3.8.0"

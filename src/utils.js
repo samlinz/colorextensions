@@ -25,10 +25,8 @@ export function getColorType(value) {
 
     // Check if value is object.-
     if (typeof value === "object") {
-        if (RGB_PROPERTIES.every(p => p in value)) {
-            return COLOR_TYPES["Object"];
-        }
-        throw Error("Value was object but was missing required properties");
+        validateRgbObject(value);
+        return COLOR_TYPES["Object"];
     }
 
     if (typeof value !== "string") {
