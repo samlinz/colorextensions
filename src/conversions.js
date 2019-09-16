@@ -52,7 +52,7 @@ export function hexToObj(hex) {
  */
 export function objToHex(obj, options) {
     const optShortForm = options && options.shortForm;
-    const optPrefix = options && options.prefix ? options.prefix : true;
+    const optPrefix = options && "prefix" in options ? options.prefix : true;
 
     let result = optPrefix ? "#" : "";
     for (const property of RGB_PROPERTIES) {
@@ -101,7 +101,7 @@ export function rgbToObj(rgb) {
     };
 
     // RGBA.
-    if (matches.length === 5) {
+    if (matches[4] !== undefined) {
         result["a"] = +matches[4];
     }
 
