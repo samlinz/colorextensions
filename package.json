@@ -1,32 +1,55 @@
 {
-  "name": "colorextensions",
-  "version": "1.0.0",
-  "description": "",
-  "private": true,
-  "main": "colorinterpolator.js",
-  "scripts": {
-    "test": "jest",
-    "testCoverage": "jest --coverage",
-    "build": "npx webpack --mode=production",
-    "start": "npx webpack-dev-server",
-    "startOpen": "npx webpack-dev-server --open"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
-    "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.6",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^5.0.4",
-    "eslint": "^6.3.0",
-    "html-webpack-plugin": "^3.2.0",
-    "jest": "^24.9.0",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8",
-    "webpack-dev-server": "^3.8.0"
-  }
+    "name": "color-extensions",
+    "version": "1.0.0",
+    "description": "Parse, convert and interpolate colors and create colormaps.",
+    "private": false,
+    "main": "build/colorextensions.min.js",
+    "files": [
+        "README.md",
+        "build/*.js"
+    ],
+    "scripts": {
+        "test": "jest",
+        "testCoverage": "jest --coverage",
+        "build": "npx webpack --mode=production",
+        "start": "npx webpack-dev-server",
+        "startOpen": "npx webpack-dev-server --open"
+    },
+    "keywords": [
+        "color",
+        "parse",
+        "parsing",
+        "colour",
+        "colormap",
+        "interpolate",
+        "hex",
+        "rgb"
+    ],
+    "author": "Samuel Lindqvist",
+    "license": "ISC",
+    "dependencies": {
+        "lodash": "^4.17.15"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/samlinz/colorextensions"
+    },
+    "bugs": {
+        "url": "https://github.com/samlinz/colorextensions/issues"
+    },
+    "homepage": "https://github.com/samlinz/colorextensions",
+    "devDependencies": {
+        "@babel/core": "^7.6.0",
+        "@babel/preset-env": "^7.6.0",
+        "babel-jest": "^24.9.0",
+        "babel-loader": "^8.0.6",
+        "clean-webpack-plugin": "^3.0.0",
+        "copy-webpack-plugin": "^5.0.4",
+        "eslint": "^6.3.0",
+        "html-webpack-plugin": "^3.2.0",
+        "jest": "^24.9.0",
+        "webpack": "^4.39.3",
+        "webpack-cli": "^3.3.8",
+        "webpack-dev-server": "^3.8.0"
+    }
 }

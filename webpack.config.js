@@ -8,11 +8,15 @@ const npmPackage = require("./package.json");
 module.exports = {
     mode: "development",
     entry: {
-        "colorextensions_browser": "./src/browserentry.js",
+        colorextensions: "./src/index.js"
     },
     output: {
-        filename: "[name].min.js",
-        path: path.resolve(__dirname, "build")
+        filename: "colorextensions.min.js",
+        path: path.resolve(__dirname, "build"),
+        library: "ColorExtensions",
+        globalObject: "this",
+        // libraryExport: "default",
+        libraryTarget: "umd"
     },
     // devtool: "inline-source-map",
     devServer: {
