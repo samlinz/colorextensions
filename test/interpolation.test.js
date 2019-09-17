@@ -34,7 +34,16 @@ describe("Color Interpolation", () => {
     });
 
     it("should create list of colors", () => {
-        let colors = interpolation.ColorInterpolator.generateColors(
+        const interpolator = new interpolation.ColorInterpolator({
+            0: "000",
+            1: "FFF"
+        });
+        let colors = interpolator.generateColors(100);
+        expect(colors.length).toBe(100);
+        expect(colors[0]).toEqual("#000000");
+        expect(colors[colors.length - 1]).toEqual("#ffffff");
+
+        colors = interpolation.ColorInterpolator.generateColors(
             10,
             "#000",
             "#fff"

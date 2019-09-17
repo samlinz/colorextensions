@@ -6,4 +6,4 @@ export const COLOR_TYPES = {
 };
 
 export const RGB_PROPERTIES = ["r", "g", "b"];
-export const RGB_REGEX = /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+)\s*)?\)/;
+export const RGB_REGEX = /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+)\s*)?\)/i;

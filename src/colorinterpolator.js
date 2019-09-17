@@ -165,14 +165,12 @@ export class ColorInterpolator {
     /**
      * Generate a list of interpolated colors from a colormap.
      *
-     * @static
      * @param {number} n The count of colors in the list.
-     * @param {any...} args Color arguments, either start and end points or color map object.
+     * @param {string?} format Format in which to produce the colors.
      * @returns A list of n colors from the start to end of the colormap.
      * @memberof ColorInterpolator
      */
-    static generateColors(n, ...args) {
-        const interpolator = new ColorInterpolator(...args);
+    generateColors(n, format) {
         const step = 100 / (n - 1);
 
         const result = [];
@@ -184,13 +182,27 @@ export class ColorInterpolator {
             if (count === n) {
                 i = 100;
             }
-            result.push(interpolator.getColor(i / 100));
+            result.push(this.getColor(i / 100, format));
         }
 
         if (result.length < n) {
-            result.push(interpolator.getColor(1.0));
+            result.push(this.getColor(1.0, format));
         }
 
         return result;
+    }
+
+    /**
+     * Generate a list of interpolated colors from a colormap.
+     *
+     * @static
+     * @param {number} n The count of colors in the list.
+     * @param {any...} args Color arguments, either start and end points or color map object.
+     * @returns A list of n colors from the start to end of the colormap.
+     * @memberof ColorInterpolator
+     */
+    static generateColors(n, ...args) {
+        const interpolator = new ColorInterpolator(...args);
+        return interpolator.generateColors(n);
     }
 }
