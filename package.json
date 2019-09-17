@@ -27,9 +27,7 @@
     ],
     "author": "Samuel Lindqvist",
     "license": "ISC",
-    "dependencies": {
-        "lodash": "^4.17.15"
-    },
+    "dependencies": {},
     "repository": {
         "type": "git",
         "url": "https://github.com/samlinz/colorextensions"
@@ -50,6 +48,7 @@
         "jest": "^24.9.0",
         "webpack": "^4.39.3",
         "webpack-cli": "^3.3.8",
+        "webpack-copy-after-build-plugin": "^1.0.1",
         "webpack-dev-server": "^3.8.0"
     }
 }

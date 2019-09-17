@@ -2,8 +2,6 @@
 
 Parse and convert colors. Interpolate between colors or create colormaps as lists.
 
----
-
 ## Features
 
 -   Automatically infer color type and parse from string.
@@ -12,9 +10,7 @@ Parse and convert colors. Interpolate between colors or create colormaps as list
 -   Interpolate colors in colormaps.
 -   Create lists of colors from colormaps.
 
----
-
-## Currently supported types:
+## Currently supported types
 
 -   Hex (#000, #FF00FF, ae141c)
     -   Short or long form, with or without hash
@@ -23,8 +19,6 @@ Parse and convert colors. Interpolate between colors or create colormaps as list
 -   RGBA (rgba(0,0,0,0.5))
 -   Javascript object
     -   Properties _r_, _g_, _b_, _a_
-
----
 
 ## Examples
 
@@ -71,14 +65,21 @@ interpolator.generateColors(10);
 /*
 Produces:
 [
-    '#ffffff',                                                                                                              '#ffa1a1',                                                                                                              '#ff4242',                                                                                                              '#d50000',                                                                                                              '#470000',                                                                                                              '#00001c',                                                                                                              '#000055',                                                                                                              '#00008e',                                                                                                              '#0000c6',                                                                                                              '#0000ff'
+    '#ffffff',
+    '#ffa1a1',
+    '#ff4242',
+    '#d50000',
+    '#470000',
+    '#00001c',
+    '#000055',
+    '#00008e',
+    '#0000c6',
+    '#0000ff'
 ]
 */
 
 interpolator.generateColors(10, "rgb"); // Same thing, explicit format.
 ```
-
----
 
 ## Installation
 
@@ -104,8 +105,6 @@ Browser script:
 Include file colorextensions.min.js in page and access through global object ColorExtensions
 ```
 
----
-
 ## Conversions
 
 Root level functions.
@@ -126,8 +125,6 @@ Root level functions.
 </dl>
 
 Functions converting to hex take optional object which has properties _prefix_ and _shortForm_. Hex colors with shortForm=true use short (3 character) hex color if possible and fall back into 6 character form if not applicable.
-
----
 
 ## Classes
 
@@ -162,9 +159,7 @@ Produces values from colormap.
   <dd><em>Same as above but without creating object.</em></dd>
 </dl>
 
----
-
-## TODO:
+## TODO
 
 -   Interpolate alpha values
 -   HSL types

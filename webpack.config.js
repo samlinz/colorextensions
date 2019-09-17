@@ -3,6 +3,7 @@ const webpack = require("webpack");
 // const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const WebpackCopyAfterBuildPlugin = require("webpack-copy-after-build-plugin");
 const npmPackage = require("./package.json");
 
 module.exports = {
@@ -37,6 +38,9 @@ module.exports = {
                 `${npmPackage.name} ${
                     npmPackage.version
                 }, built on ${new Date()}`
+        }),
+        new WebpackCopyAfterBuildPlugin({
+            colorextensions: "../colorextensions.min.js"
         })
     ],
     module: {
