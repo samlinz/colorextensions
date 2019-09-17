@@ -134,9 +134,9 @@ export class ColorInterpolator {
         );
 
         // Calculate the new values between the provided start and end values.
-        const r = (+startColor["r"] + correctedFraction * rangeR) | 0;
-        const g = (+startColor["g"] + correctedFraction * rangeG) | 0;
-        const b = (+startColor["b"] + correctedFraction * rangeB) | 0;
+        const r = Math.round(+startColor["r"] + correctedFraction * rangeR) | 0;
+        const g = Math.round(+startColor["g"] + correctedFraction * rangeG) | 0;
+        const b = Math.round(+startColor["b"] + correctedFraction * rangeB) | 0;
 
         const colorObj = {
             r,
@@ -173,11 +173,22 @@ export class ColorInterpolator {
      */
     static generateColors(n, ...args) {
         const interpolator = new ColorInterpolator(...args);
-        const step = 1.0 / n;
+        const step = 100 / (n - 1);
 
         const result = [];
-        for (let i = 0; i <= 1.0; i += step) {
-            result.push(interpolator.getColor(i));
+        let count = 0;
+        for (let i = 0; i <= 100; i += step) {
+            count++;
+
+            // Fix potential issues with floating point precision.
+            if (count === n) {
+                i = 100;
+            }
+            result.push(interpolator.getColor(i / 100));
+        }
+
+        if (result.length < n) {
+            result.push(interpolator.getColor(1.0));
         }
 
         return result;

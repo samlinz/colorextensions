@@ -59,9 +59,9 @@ describe("Hex conversions", () => {
     });
 
     it("should fail for invalid obj", () => {
-        let func = () => conversions.objToHex({r: -5, g: 5, b: 5});
+        let func = () => conversions.objToHex({ r: -5, g: 5, b: 5 });
         expect(func).toThrow();
-        func = () => conversions.objToHex({r: 255, g: 255});
+        func = () => conversions.objToHex({ r: 255, g: 255 });
         expect(func).toThrow();
     });
 });
@@ -101,9 +101,13 @@ describe("RGB conversions", () => {
     it("should convert hex to rgb", () => {
         let obj = conversions.hexToRgb("0e0");
         expect(obj).toEqual("rgb(0,238,0)");
-        obj = conversions.rgbToHex("rgba(128, 128, 128, 0.2)", { shortForm: true });
+        obj = conversions.rgbToHex("rgba(128, 128, 128, 0.2)", {
+            shortForm: true
+        });
         expect(obj).toEqual("#808080");
-        obj = conversions.rgbToHex("rgba(255, 255, 255, 0.2)", { shortForm: true });
+        obj = conversions.rgbToHex("rgba(255, 255, 255, 0.2)", {
+            shortForm: true
+        });
         expect(obj).toEqual("#fff");
     });
 });
