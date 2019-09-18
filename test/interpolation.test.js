@@ -33,6 +33,30 @@ describe("Color Interpolation", () => {
         expect(color).toEqual("rgb(0,128,128)");
     });
 
+    it("should interpolate alpha values", () => {
+        let interpolator = new interpolation.ColorInterpolator(
+            "rgba(0,0,0,0)",
+            "rgba(255,255,255,1)"
+        );
+        let color = interpolator.getColor(0);
+        expect(color).toBe("rgba(0,0,0,0)");
+        color = interpolator.getColor(1);
+        expect(color).toBe("rgba(255,255,255,1)");
+        color = interpolator.getColor(0.5);
+        expect(color).toBe("rgba(128,128,128,0.5)");
+        color = interpolator.getColor(0.333);
+        expect(color).toBe("rgba(85,85,85,0.33)");
+
+        interpolator = new interpolation.ColorInterpolator(
+            "#fff",
+            "rgba(0,0,0,0.5)"
+        );
+        color = interpolator.getColor(0.5);
+        expect(color).toBe("#808080");
+        color = interpolator.getColor(0.5, "rgb");
+        expect(color).toBe("rgba(128,128,128,0.75)");
+    });
+
     it("should create list of colors", () => {
         const interpolator = new interpolation.ColorInterpolator({
             0: "000",

@@ -78,7 +78,11 @@ Produces:
 ]
 */
 
-interpolator.generateColors(10, "rgb"); // Same thing, explicit format.
+// Same thing, explicit format.
+interpolator.generateColors(10, "rgb");
+
+// Static version without creating object, also using alpha values.
+ColorInterpolator.generateColors(10, "rgba(0,0,0,0.5)", "rgba(255,255,255,1)");
 ```
 
 ## Installation
@@ -161,6 +165,5 @@ Produces values from colormap.
 
 ## TODO
 
--   Interpolate alpha values
 -   HSL types
 -   Matplotlib colormaps

@@ -116,8 +116,16 @@ export function objToRgb(obj) {
     validateRgbObject(obj);
     const rgba = "a" in obj;
     const prefix = rgba ? "rgba" : "rgb";
+
+    // Make sure that alpha value has at max 2 decimal places.
+    let rgbaValue = obj["a"];
+    if (rgba) {
+        const rgbaText = rgbaValue + "";
+        rgbaValue = rgbaText.length > 3 ? rgbaValue.toFixed(2) : rgbaValue;
+    }
+
     return `${prefix}(${obj["r"]},${obj["g"]},${obj["b"]}${
-        rgba ? `,${obj["a"]}` : ""
+        rgba ? `,${rgbaValue}` : ""
     })`;
 }
 

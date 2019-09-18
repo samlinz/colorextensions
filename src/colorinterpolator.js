@@ -59,7 +59,11 @@ export class ColorMap {
                 const correctedFraction =
                     (fraction - currentFraction) /
                     (nextFraction - currentFraction);
-                return [correctedFraction, currentColor, nextColor];
+                return [
+                    correctedFraction,
+                    Object.assign({}, currentColor),
+                    Object.assign({}, nextColor)
+                ];
             }
         }
     }
@@ -99,11 +103,22 @@ export class ColorInterpolator {
      * @memberof ColorInterpolator
      */
     getRange(start, stop) {
-        return {
+        const result = {
             r: +stop["r"] - +start["r"],
             g: +stop["g"] - +start["g"],
-            b: +stop["b"] - +start["b"]
+            b: +stop["b"] - +start["b"],
+            a: null
         };
+
+        const aInStart = "a" in start;
+        const aInStop = "a" in stop;
+        if (aInStart || aInStop) {
+            const startA = aInStart ? start["a"] : 1;
+            const stopA = aInStop ? stop["a"] : 1;
+            result["a"] = +stopA - +startA;
+        }
+
+        return result;
     }
 
     /**
@@ -128,7 +143,7 @@ export class ColorInterpolator {
         ] = this.colorMap.getColorsAndFraction(fraction);
 
         // Get range between the two colors the fraction falls in between.
-        const { r: rangeR, g: rangeG, b: rangeB } = this.getRange(
+        const { r: rangeR, g: rangeG, b: rangeB, a: rangeA } = this.getRange(
             startColor,
             stopColor
         );
@@ -143,6 +158,12 @@ export class ColorInterpolator {
             g,
             b
         };
+
+        // Interpolate alpha value if present.
+        if (rangeA !== null) {
+            const aStartColor = "a" in startColor ? startColor["a"] : 1;
+            colorObj["a"] = aStartColor + +correctedFraction * rangeA;
+        }
 
         // Convert object to either the original or provided color type.
         return convertTo(colorObj, type || this.type);
