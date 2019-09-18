@@ -99,6 +99,9 @@ export class ColorInterpolator {
 
     /**
      * Get color range between two colors.
+     * @param {string} start Start point color.
+     * @param {string} stop Stop point color.
+     * @returns Object with r, g, b and a ranges between colors (in rgb).
      *
      * @memberof ColorInterpolator
      */

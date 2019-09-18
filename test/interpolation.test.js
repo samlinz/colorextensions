@@ -20,7 +20,7 @@ describe("Color Interpolation", () => {
 
         const interpolator = new interpolation.ColorInterpolator(colorMap);
         let color = interpolator.getColor(0, "rgb");
-        expect(color).toEqual("rgb(0,0,0)");
+        expect(color).toEqual("rgb(0, 0, 0)");
         color = interpolator.getColor(0.5, "hex");
         expect(color).toEqual("#00ff00");
         color = interpolator.getColor(1, "object");
@@ -30,7 +30,7 @@ describe("Color Interpolation", () => {
             b: 255
         });
         color = interpolator.getColor(0.75, "rgb");
-        expect(color).toEqual("rgb(0,128,128)");
+        expect(color).toEqual("rgb(0, 128, 128)");
     });
 
     it("should interpolate alpha values", () => {
@@ -39,13 +39,13 @@ describe("Color Interpolation", () => {
             "rgba(255,255,255,1)"
         );
         let color = interpolator.getColor(0);
-        expect(color).toBe("rgba(0,0,0,0)");
+        expect(color).toBe("rgba(0, 0, 0, 0)");
         color = interpolator.getColor(1);
-        expect(color).toBe("rgba(255,255,255,1)");
+        expect(color).toBe("rgba(255, 255, 255, 1)");
         color = interpolator.getColor(0.5);
-        expect(color).toBe("rgba(128,128,128,0.5)");
+        expect(color).toBe("rgba(128, 128, 128, 0.5)");
         color = interpolator.getColor(0.333);
-        expect(color).toBe("rgba(85,85,85,0.33)");
+        expect(color).toBe("rgba(85, 85, 85, 0.33)");
 
         interpolator = new interpolation.ColorInterpolator(
             "#fff",
@@ -54,7 +54,7 @@ describe("Color Interpolation", () => {
         color = interpolator.getColor(0.5);
         expect(color).toBe("#808080");
         color = interpolator.getColor(0.5, "rgb");
-        expect(color).toBe("rgba(128,128,128,0.75)");
+        expect(color).toBe("rgba(128, 128, 128, 0.75)");
     });
 
     it("should create list of colors", () => {
@@ -84,5 +84,23 @@ describe("Color Interpolation", () => {
         expect(colors.length).toBe(30);
         expect(colors[0]).toEqual("#00ff00");
         expect(colors[colors.length - 1]).toEqual("#ff00ff");
+
+        colors = interpolation.ColorInterpolator.generateColors(10, {
+            0: "hsl(0, 0%, 0%)",
+            0.5: "hsl(120, 100%, 25%)",
+            1: "hsl(0, 0%, 100%)"
+        });
+        expect(colors.length).toBe(10);
+        expect(colors[0]).toEqual("hsl(0, 0%, 0%)");
+        expect(colors[colors.length - 1]).toEqual("hsl(0, 0%, 100%)");
+
+        colors = interpolation.ColorInterpolator.generateColors(
+            20,
+            "hsl(0, 0%, 0%, 0)",
+            "hsl(0, 0%, 100%, 1.0)"
+        );
+        expect(colors.length).toBe(20);
+        expect(colors[0]).toEqual("hsla(0, 0%, 0%, 0)");
+        expect(colors[colors.length - 1]).toEqual("hsla(0, 0%, 100%, 1)");
     });
 });

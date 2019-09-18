@@ -12,11 +12,18 @@ Parse and convert colors. Interpolate between colors or create colormaps as list
 
 ## Currently supported types
 
--   Hex (#000, #FF00FF, ae141c)
+-   Hex
     -   Short or long form, with or without hash
--   RGB (rgb(255, 0, 123) rgb(0,0,255))
+    -   #000, #FF00FF, ae141c
+-   RGB
     -   Whitespace between values allowed but not encouraged
--   RGBA (rgba(0,0,0,0.5))
+    -   rgb(255, 0, 123) rgb(0,0,255)
+-   RGBA
+    -   rgba(0, 0, 0, 0.5)
+-   HSL
+    -   hsl(120, 100%, 50%)
+-   HSLA
+    -   hsla(120, 100%, 50%, 0.5)
 -   Javascript object
     -   Properties _r_, _g_, _b_, _a_
 
@@ -37,6 +44,7 @@ objToRgb({ r: 255, g: 128, b: 0, a: 0.1 }); // Produces 'rgba(255,128,0,0.1)'
 // Automatic inference of source type.
 convertTo("#00ff00", "rgb"); // Produces 'rgb(0,255,0)'
 convertTo("#00ff00", "object"); // Produces { r: 0, g: 255, b: 0 }
+convertTo("hsla(240, 100%, 50%, 0.5)", "rgb"); // Produces 'rgba(0, 0, 255, 0.5)'
 
 // Infer the types.
 getColorType("#FFF"); // Produces 'hex_short'
@@ -114,18 +122,34 @@ Include file colorextensions.min.js in page and access through global object Col
 Root level functions.
 
 <dl>
+
   <dt><code>hexToObj(value)</code></dt>
-  <dd><em>Hex to JS object</em></dd>
-  <dt><code>objToHex(value, hexOptions)</code></dt>
-  <dd><em>JS object to hex</em></dd>
+  <dd><em>Hex to JS object.</em></dd>
+  <dt><code>objToHex(value, hexOptions?)</code></dt>
+  <dd><em>JS object to hex.</em></dd>
+  <dt><code>hexToHsl(value)</code></dt>
+  <dd><em>Hex to HSL.</em></dd>
+  <dt><code>hexToRgb(value)</code></dt>
+  <dd><em>Hex to RGB.</em></dd>
+
   <dt><code>rgbToObj(value)</code></dt>
-  <dd><em>RGB/RGBA to JS object</em></dd>
+  <dd><em>RGB/RGBA to JS object.</em></dd>
   <dt><code>objToRgb(value)</code></dt>
   <dd><em>JS object to RGB/RGBA. RGBA if *a* property present.</em></dd>
-  <dt><code>hexToRgb(value)</code></dt>
-  <dd><em>Hex to RGB/RGBA.</em></dd>
-  <dt><code>rgbToHex(value, hexOptions)</code></dt>
+  <dt><code>rgbToHsl(value)</code></dt>
+  <dd><em>RGB/RGBA to HSL/HSLA.</em></dd>
+  <dt><code>rgbToHex(value, hexOptions?)</code></dt>
   <dd><em>RGB/RGBA to hex.</em></dd>
+
+  <dt><code>hslToObj(value)</code></dt>
+  <dd><em>HSL/HSLA to JS object.</em></dd>
+  <dt><code>objToHsl(value)</code></dt>
+  <dd><em>JS object to HSL/HSLA. HSLA if *a* property present.</em></dd>
+  <dt><code>hslToRgb(value)</code></dt>
+  <dd><em>HSL/HSLA to RGB/RGBA.</em></dd>
+  <dt><code>hslToHex(value, hexOptions?)</code></dt>
+  <dd><em>HSL/HSLA to hex.</em></dd>
+
 </dl>
 
 Functions converting to hex take optional object which has properties _prefix_ and _shortForm_. Hex colors with shortForm=true use short (3 character) hex color if possible and fall back into 6 character form if not applicable.
@@ -165,12 +189,15 @@ Produces values from colormap.
 
 ## Changelog
 
-<dl>
-  <dt>1.1</dt>
-  <dd>Support interpolating alpha values</dd>
-</dl>
+#### 1.2
+
+-   Support for HSL and HSLA types
+-   Various minor fixes and improvements
+
+#### 1.1
+
+-   Support interpolating alpha values
 
 ## TODO
 
--   HSL types
--   Matplotlib colormaps
+-   Hardcoded Matplotlib colormaps
