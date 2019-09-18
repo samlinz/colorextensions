@@ -163,6 +163,13 @@ Produces values from colormap.
   <dd><em>Same as above but without creating object.</em></dd>
 </dl>
 
+## Changelog
+
+<dl>
+  <dt>1.1</dt>
+  <dd>Support interpolating alpha values</dd>
+</dl>
+
 ## TODO
 
 -   HSL types

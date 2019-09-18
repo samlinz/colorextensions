@@ -1,6 +1,6 @@
 {
     "name": "color-extensions",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Parse, convert and interpolate colors and create colormaps.",
     "private": false,
     "main": "build/colorextensions.min.js",
