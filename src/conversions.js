@@ -1,5 +1,10 @@
 import { RGB_PROPERTIES, RGB_REGEX, COLOR_TYPES, HSL_REGEX } from "./constants";
-import { isRgbInValidRange, validateRgbObject, getColorType } from "./utils";
+import {
+    isRgbInValidRange,
+    validateRgbObject,
+    getColorType,
+    parseHsl
+} from "./utils";
 
 /**
  * Convert color as hex string to object with rgb integer properties.
@@ -160,24 +165,10 @@ export function hexToRgb(hex) {
  * @returns JS Object with r, g, b, (a) properties.
  */
 export function hslToObj(hsl) {
-    const matches = HSL_REGEX.exec(hsl);
-    if (!matches) throw Error(`Could not parse hsl ${hsl}`);
-    if (matches.length < 4) throw Error(`Invalid number of matched groups`);
+    let { h, s, l, a } = parseHsl(hsl);
 
-    const { h, s, l } = {
-        h: +matches[1],
-        s: +matches[2] / 100,
-        l: +matches[3] / 100
-    };
-
-    if (h < 0 || h >= 360) throw Error(`H ${h} out-of-range`);
-    if (s < 0 || s > 1) throw Error(`S ${s * 100} out-of-range`);
-    if (l < 0 || l > 1) throw Error(`L ${l * 100} out-of-range`);
-
-    let a = null;
-    if (matches[4] !== undefined) {
-        a = +matches[4];
-    }
+    s /= 100;
+    l /= 100;
 
     const c = (1 - Math.abs(2 * l - 1)) * s;
     const x = c * (1 - Math.abs(((h / 60) % 2) - 1));

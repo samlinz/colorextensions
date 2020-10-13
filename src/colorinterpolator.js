@@ -1,5 +1,5 @@
 import { convertTo } from "./conversions";
-import { getColorType } from "./utils";
+import { getColorType, parseHsl } from "./utils";
 import { COLOR_TYPES } from "./constants";
 
 /**
@@ -18,7 +18,7 @@ export class ColorMap {
         // Convert color values and range fractions into lists.
         for (const [fraction, color] of Object.entries(values)) {
             const convertedFraction = +fraction;
-            const convertedColor = convertTo(color, COLOR_TYPES["Object"]);
+            const convertedColor = convertTo(color, COLOR_TYPES["HSL"]);
             this.fractionsAndColors.push([convertedFraction, convertedColor]);
         }
 
@@ -59,11 +59,20 @@ export class ColorMap {
                 const correctedFraction =
                     (fraction - currentFraction) /
                     (nextFraction - currentFraction);
-                return [
-                    correctedFraction,
-                    Object.assign({}, currentColor),
-                    Object.assign({}, nextColor)
-                ];
+
+                let currentColorCopy,
+                    nextColorCopy = null;
+                if (typeof currentColor === "object") {
+                    currentColorCopy = Object.assign({}, currentColor);
+                    nextColorCopy = Object.assign({}, nextColor);
+                } else if (typeof currentColor === "string") {
+                    currentColorCopy = currentColor.slice();
+                    nextColorCopy = nextColor.slice();
+                } else {
+                    throw Error("Invalid type of object");
+                }
+
+                return [correctedFraction, currentColorCopy, nextColorCopy];
             }
         }
     }
@@ -107,17 +116,17 @@ export class ColorInterpolator {
      */
     getRange(start, stop) {
         const result = {
-            r: +stop["r"] - +start["r"],
-            g: +stop["g"] - +start["g"],
-            b: +stop["b"] - +start["b"],
+            h: +stop.h - +start.h,
+            s: +stop.s - +start.s,
+            l: +stop.l - +start.l,
             a: null
         };
 
-        const aInStart = "a" in start;
-        const aInStop = "a" in stop;
+        const aInStart = start.a !== undefined && start.a !== null;
+        const aInStop = stop.a !== undefined && stop.a !== null;
         if (aInStart || aInStop) {
-            const startA = aInStart ? start["a"] : 1;
-            const stopA = aInStop ? stop["a"] : 1;
+            const startA = aInStart ? start.a : 1;
+            const stopA = aInStop ? stop.a : 1;
             result["a"] = +stopA - +startA;
         }
 
@@ -145,31 +154,36 @@ export class ColorInterpolator {
             stopColor
         ] = this.colorMap.getColorsAndFraction(fraction);
 
+        const { h: startH, s: startS, l: startL, a: startA } = parseHsl(
+            startColor
+        );
+        const { h: stopH, s: stopS, l: stopL, a: stopA } = parseHsl(stopColor);
+
         // Get range between the two colors the fraction falls in between.
-        const { r: rangeR, g: rangeG, b: rangeB, a: rangeA } = this.getRange(
-            startColor,
-            stopColor
+        const { h: rangeH, s: rangeS, l: rangeL, a: rangeA } = this.getRange(
+            { h: startH, s: startS, l: startL, a: startA },
+            { h: stopH, s: stopS, l: stopL, a: stopA }
         );
 
         // Calculate the new values between the provided start and end values.
-        const r = Math.round(+startColor["r"] + correctedFraction * rangeR) | 0;
-        const g = Math.round(+startColor["g"] + correctedFraction * rangeG) | 0;
-        const b = Math.round(+startColor["b"] + correctedFraction * rangeB) | 0;
-
-        const colorObj = {
-            r,
-            g,
-            b
-        };
+        const h = Math.round(+startH + correctedFraction * rangeH) | 0;
+        const s = Math.round(+startS + correctedFraction * rangeS) | 0;
+        const l = Math.round(+startL + correctedFraction * rangeL) | 0;
 
         // Interpolate alpha value if present.
-        if (rangeA !== null) {
-            const aStartColor = "a" in startColor ? startColor["a"] : 1;
-            colorObj["a"] = aStartColor + +correctedFraction * rangeA;
+        let containsA = typeof rangeA === "number";
+        let a = null;
+        if (containsA) {
+            const aStartColor = startA !== undefined ? startA : 1;
+            a = aStartColor + +correctedFraction * rangeA;
         }
 
+        const finalHsl = `hsl${containsA ? "a" : ""}(${h}, ${s}%, ${l}%${
+            containsA ? `, ${a}` : ""
+        })`;
+
         // Convert object to either the original or provided color type.
-        return convertTo(colorObj, type || this.type);
+        return convertTo(finalHsl, type || this.type);
     }
 
     /**

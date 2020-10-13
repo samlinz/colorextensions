@@ -81,3 +81,26 @@ export function getColorType(value) {
 
     throw Error("Couldn't determine the color type of the value");
 }
+
+export function parseHsl(hsl) {
+    const matches = HSL_REGEX.exec(hsl);
+    if (!matches) throw Error(`Could not parse hsl ${hsl}`);
+    if (matches.length < 4) throw Error(`Invalid number of matched groups`);
+
+    const { h, s, l } = {
+        h: +matches[1],
+        s: +matches[2],
+        l: +matches[3]
+    };
+
+    if (h < 0 || h >= 360) throw Error(`H ${h} out-of-range`);
+    if (s < 0 || s > 100) throw Error(`S ${s} out-of-range`);
+    if (l < 0 || l > 100) throw Error(`L ${l} out-of-range`);
+
+    let a = null;
+    if (matches[4] !== undefined) {
+        a = +matches[4];
+    }
+
+    return { h, s, l, a };
+}
